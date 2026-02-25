@@ -12,6 +12,7 @@ import {
   addWorkflowNode, updateWorkflowNode, deleteWorkflowNode,
   addWorkflowConnection, deleteWorkflowConnection,
   bulkSaveWorkflow, exportWorkflow, importWorkflow, executeWorkflow, getBoards,
+  getIssues, getIssue, createIssue, updateIssue, updateIssueStatus,
   AuthCooldownError, AuthFailedError, AuthMissingError
 } from './tools/index.js'
 
@@ -627,6 +628,78 @@ async function handleRequest(req: any, res: any) {
                 },
                 required: ['agent_name', 'workflow_id']
               }
+            },
+            // Issue tools
+            {
+              name: 'get_issues',
+              description: 'Get list of issues. Issues are feature requests or bugs submitted by users. Supports filtering by status and pagination.',
+              inputSchema: {
+                type: 'object',
+                properties: {
+                  agent_name: { type: 'string', description: 'Agent name' },
+                  api_token: { type: 'string', description: 'API token (optional if set in .env)' },
+                  status: { type: 'string', description: 'Filter by status (Open, InProgress, Resolved, Closed)' },
+                  limit: { type: 'number', description: 'Max number of issues per page', default: 20 },
+                  page: { type: 'number', description: 'Page number', default: 1 }
+                },
+                required: ['agent_name']
+              }
+            },
+            {
+              name: 'get_issue',
+              description: 'Get details of a single issue by ID.',
+              inputSchema: {
+                type: 'object',
+                properties: {
+                  agent_name: { type: 'string', description: 'Agent name' },
+                  api_token: { type: 'string', description: 'API token (optional if set in .env)' },
+                  issue_id: { type: 'string', description: 'Issue ID' }
+                },
+                required: ['agent_name', 'issue_id']
+              }
+            },
+            {
+              name: 'create_issue',
+              description: 'Create a new issue (feature request or bug report).',
+              inputSchema: {
+                type: 'object',
+                properties: {
+                  agent_name: { type: 'string', description: 'Agent name' },
+                  api_token: { type: 'string', description: 'API token (optional if set in .env)' },
+                  title: { type: 'string', description: 'Issue title (required)' },
+                  description: { type: 'string', description: 'Issue description (optional)' }
+                },
+                required: ['agent_name', 'title']
+              }
+            },
+            {
+              name: 'update_issue',
+              description: 'Update an existing issue title or description.',
+              inputSchema: {
+                type: 'object',
+                properties: {
+                  agent_name: { type: 'string', description: 'Agent name' },
+                  api_token: { type: 'string', description: 'API token (optional if set in .env)' },
+                  issue_id: { type: 'string', description: 'Issue ID to update' },
+                  title: { type: 'string', description: 'New issue title' },
+                  description: { type: 'string', description: 'New issue description' }
+                },
+                required: ['agent_name', 'issue_id']
+              }
+            },
+            {
+              name: 'update_issue_status',
+              description: 'Change issue status. Note: Requires system admin privileges.',
+              inputSchema: {
+                type: 'object',
+                properties: {
+                  agent_name: { type: 'string', description: 'Agent name' },
+                  api_token: { type: 'string', description: 'API token (optional if set in .env)' },
+                  issue_id: { type: 'string', description: 'Issue ID' },
+                  status: { type: 'string', description: 'New status (Open, InProgress, Resolved, Closed)' }
+                },
+                required: ['agent_name', 'issue_id', 'status']
+              }
             }
           ]
         }
@@ -803,6 +876,28 @@ async function handleRequest(req: any, res: any) {
           break
         case 'execute_workflow':
           result = await executeWorkflow(agentName, apiToken, toolArgs?.workflow_id, toolArgs?.trigger_data)
+          break
+        // Issue tools
+        case 'get_issues':
+          result = await getIssues(agentName, apiToken, toolArgs?.status, toolArgs?.limit, toolArgs?.page)
+          break
+        case 'get_issue':
+          result = await getIssue(agentName, apiToken, toolArgs?.issue_id)
+          break
+        case 'create_issue':
+          result = await createIssue(agentName, apiToken, {
+            title: toolArgs?.title,
+            description: toolArgs?.description
+          })
+          break
+        case 'update_issue':
+          result = await updateIssue(agentName, apiToken, toolArgs?.issue_id, {
+            title: toolArgs?.title,
+            description: toolArgs?.description
+          })
+          break
+        case 'update_issue_status':
+          result = await updateIssueStatus(agentName, apiToken, toolArgs?.issue_id, toolArgs?.status)
           break
         default:
           throw new Error(`Unknown tool: ${name}`)

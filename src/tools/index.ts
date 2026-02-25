@@ -387,3 +387,57 @@ export async function getBoards(agentName: string, apiToken: string) {
   const res = await api.get('/boards')
   return res.data
 }
+
+// ============================================================
+// Issue Tools
+// ============================================================
+
+export async function getIssues(agentName: string, apiToken: string, status?: string, limit: number = 20, page: number = 1) {
+  const api = createApiClient(agentName, apiToken)
+  const params: any = { limit, page }
+  if (status) params.status = status
+  const res = await api.get('/issues', { params })
+  return res.data
+}
+
+export async function getIssue(agentName: string, apiToken: string, issueId: string) {
+  const api = createApiClient(agentName, apiToken)
+  const res = await api.get(`/issues/${issueId}`)
+  return res.data
+}
+
+export async function createIssue(agentName: string, apiToken: string, data: {
+  title: string
+  description?: string
+}) {
+  // Validate required fields
+  if (!data.title || data.title.trim() === '') {
+    throw new Error('title is required for creating an issue')
+  }
+
+  const api = createApiClient(agentName, apiToken)
+  const body: any = {
+    title: data.title
+  }
+  if (data.description) body.description = data.description
+  const res = await api.post('/issues', body)
+  return res.data
+}
+
+export async function updateIssue(agentName: string, apiToken: string, issueId: string, data: {
+  title?: string
+  description?: string
+}) {
+  const api = createApiClient(agentName, apiToken)
+  const body: any = {}
+  if (data.title !== undefined) body.title = data.title
+  if (data.description !== undefined) body.description = data.description
+  const res = await api.put(`/issues/${issueId}`, body)
+  return res.data
+}
+
+export async function updateIssueStatus(agentName: string, apiToken: string, issueId: string, status: string) {
+  const api = createApiClient(agentName, apiToken)
+  const res = await api.patch(`/issues/${issueId}/status`, { status })
+  return res.data
+}
