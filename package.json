@@ -1,0 +1,30 @@
+{
+  "name": "@maoshutalk/botdeck-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for BotDeck task management",
+  "author": "maoshu <maoshutalk@gmail.com>",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "start": "node dist/index.js",
+    "build": "tsc",
+    "dev": "tsx src/index.ts",
+    "test:comment": "tsx tests/comment-crud.test.ts",
+    "test:quick": "tsx tests/quick-test.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.26.0",
+    "@types/cors": "^2.8.19",
+    "axios": "^1.6.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^4.22.1",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.10.0",
+    "tsx": "^4.6.0",
+    "typescript": "^5.3.0"
+  }
+}
