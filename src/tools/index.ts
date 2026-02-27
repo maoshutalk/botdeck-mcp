@@ -165,6 +165,7 @@ export async function createTask(agentName: string, apiToken: string, data: {
     priority: data.priority,
     status: data.status
   }
+
   const res = await api.post('/tasks', body)
   return res.data
 }
@@ -439,5 +440,21 @@ export async function updateIssue(agentName: string, apiToken: string, issueId: 
 export async function updateIssueStatus(agentName: string, apiToken: string, issueId: string, status: string) {
   const api = createApiClient(agentName, apiToken)
   const res = await api.patch(`/issues/${issueId}/status`, { status })
+  return res.data
+}
+
+// ============================================================
+// Team Membership Tools
+// ============================================================
+
+export async function getAgentTeams(agentName: string, apiToken: string, agentId: string) {
+  const api = createApiClient(agentName, apiToken)
+  const res = await api.get(`/agents/${agentId}/teams`)
+  return res.data
+}
+
+export async function getTeamMembers(agentName: string, apiToken: string, teamId: string) {
+  const api = createApiClient(agentName, apiToken)
+  const res = await api.get(`/teams/${teamId}/members`)
   return res.data
 }

@@ -101,7 +101,7 @@ async function handleRequest(req: any, res: any) {
                 properties: {
                   agent_name: { type: 'string', description: 'Agent name' },
                   api_token: { type: 'string', description: 'API token (optional if set in .env)' },
-                  status: { type: 'string', description: 'Task status (Todo, InProgress, Review, Done)' },
+                  status: { type: 'string', description: 'Task status (Todo, In Progress, Review, Done)' },
                   limit: { type: 'number', description: 'Max number of tasks', default: 20 }
                 },
                 required: ['agent_name']
@@ -129,7 +129,7 @@ async function handleRequest(req: any, res: any) {
                   agent_name: { type: 'string', description: 'Agent name' },
                   api_token: { type: 'string', description: 'API token (optional if set in .env)' },
                   task_id: { type: 'string', description: 'Task ID' },
-                  status: { type: 'string', description: 'New status (Todo, InProgress, Review, Done)' },
+                  status: { type: 'string', description: 'New status (Todo, In Progress, Review, Done)' },
                   assignee_id: { type: 'string', description: 'Assignee ID (null to unassign)' }
                 },
                 required: ['agent_name', 'task_id']
@@ -137,7 +137,7 @@ async function handleRequest(req: any, res: any) {
             },
             {
               name: 'create_task',
-              description: 'Create a new task in agent mode. ALL parameters are REQUIRED: title, description, assigneeId, priority, boardId, status.',
+              description: 'Create a new task in agent mode. All parameters are REQUIRED: title, description, assignee_id, priority, board_id, status.',
               inputSchema: {
                 type: 'object',
                 properties: {
@@ -148,7 +148,7 @@ async function handleRequest(req: any, res: any) {
                   assignee_id: { type: 'string', description: 'Assignee Agent ID (required)' },
                   priority: { type: 'string', description: 'Priority: Low, Medium, High, Urgent (required)' },
                   board_id: { type: 'string', description: 'Board ID (required)' },
-                  status: { type: 'string', description: 'Task status: Todo, InProgress, Review, Done, Block (required)' }
+                  status: { type: 'string', description: 'Task status: Todo, In Progress, Review, Done, Block (required)' }
                 },
                 required: ['agent_name', 'title', 'description', 'assignee_id', 'priority', 'board_id', 'status']
               }
@@ -587,7 +587,7 @@ async function handleRequest(req: any, res: any) {
                             positionY: { type: 'number', description: 'Canvas Y position' },
                             config: {
                               type: 'object',
-                              description: 'AGENT: {agentId, isAgentNode:true}. TEXTBOX: {message}. TASK_STATUS: {taskStatus:{targetStatus:"Review"|"Done"|"Block"|"Todo"|"InProgress"}}. CONDITION: {conditions:[{field,operator,value}], combineOperation:"AND"|"OR"}. LOOP: {loop:{maxRetries:N, waitBetweenRetries:N}}.'
+                              description: 'AGENT: {agentId, isAgentNode:true}. TEXTBOX: {message}. TASK_STATUS: {taskStatus:{targetStatus:"Review"|"Done"|"Block"|"Todo"|"In Progress"}}. CONDITION: {conditions:[{field,operator,value}], combineOperation:"AND"|"OR"}. LOOP: {loop:{maxRetries:N, waitBetweenRetries:N}}.'
                             }
                           },
                           required: ['nodeType', 'name', 'positionX', 'positionY']
@@ -638,7 +638,7 @@ async function handleRequest(req: any, res: any) {
                 properties: {
                   agent_name: { type: 'string', description: 'Agent name' },
                   api_token: { type: 'string', description: 'API token (optional if set in .env)' },
-                  status: { type: 'string', description: 'Filter by status (Open, InProgress, Resolved, Closed)' },
+                  status: { type: 'string', description: 'Filter by status (Open, In Progress, Resolved, Closed)' },
                   limit: { type: 'number', description: 'Max number of issues per page', default: 20 },
                   page: { type: 'number', description: 'Page number', default: 1 }
                 },
@@ -696,7 +696,7 @@ async function handleRequest(req: any, res: any) {
                   agent_name: { type: 'string', description: 'Agent name' },
                   api_token: { type: 'string', description: 'API token (optional if set in .env)' },
                   issue_id: { type: 'string', description: 'Issue ID' },
-                  status: { type: 'string', description: 'New status (Open, InProgress, Resolved, Closed)' }
+                  status: { type: 'string', description: 'New status (Open, In Progress, Resolved, Closed)' }
                 },
                 required: ['agent_name', 'issue_id', 'status']
               }
@@ -757,10 +757,10 @@ async function handleRequest(req: any, res: any) {
         case 'create_task':
           result = await createTask(agentName, apiToken, {
             title: toolArgs?.title,
+            description: toolArgs?.description,
             assignee_id: toolArgs?.assignee_id,
             board_id: toolArgs?.board_id,
             priority: toolArgs?.priority,
-            description: toolArgs?.description,
             status: toolArgs?.status
           })
           break

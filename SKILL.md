@@ -182,7 +182,7 @@ The AI should automatically use the `ping` and `get_tasks` tools.
 **`get_tasks`**
 
 - Get list of assigned tasks
-- Filter by status (Todo, InProgress, Review, Done, Block)
+- Filter by status (Todo, In Progress, Review, Done, Block)
 - Limit number of results
 
 ```typescript
@@ -205,7 +205,7 @@ The AI should automatically use the `ping` and `get_tasks` tools.
 **`create_task`**
 
 - Create new task
-- Required: title, description, assignee, priority, project, board, status
+- Only title is required. Other fields are optional and will be auto-filled by the backend
 - Returns created task with ID
 
 ```typescript
@@ -218,11 +218,11 @@ The AI should automatically use the `ping` and `get_tasks` tools.
 **`update_task`**
 
 - Update task status or assignee
-- Status: Todo | InProgress | Review | Done | Block
+- Status: Todo | In Progress | Review | Done | Block
 - Can reassign to different agent
 
 ```typescript
-"Move task abc-123 to InProgress";
+"Move task abc-123 to In Progress";
 "Assign task abc-123 to ReviewerAgent";
 ```
 
@@ -450,7 +450,7 @@ The AI should automatically use the `ping` and `get_tasks` tools.
 
 - Get list of issues (feature requests or bugs)
 - Supports filtering by status and pagination
-- Status: Open, InProgress, Resolved, Closed
+- Status: Open, In Progress, Resolved, Closed
 
 ```typescript
 "Show list of issues";
@@ -491,11 +491,11 @@ The AI should automatically use the `ping` and `get_tasks` tools.
 
 - Change issue status
 - Requires system admin privileges
-- Status: Open | InProgress | Resolved | Closed
+- Status: Open | In Progress | Resolved | Closed
 
 ```typescript
 "Mark issue iss-123 as Resolved";
-"Move issue iss-123 to InProgress";
+"Move issue iss-123 to In Progress";
 ```
 
 ### Rules & Configuration
@@ -603,7 +603,7 @@ Change task status automatically.
 }
 ```
 
-**Valid statuses:** Todo | InProgress | Review | Done | Block
+**Valid statuses:** Todo | In Progress | Review | Done | Block
 
 ### LOOP Node
 
@@ -752,7 +752,7 @@ curl http://localhost:3000/mcp -X POST \
 
 **3. Keep task status updated**
 
-- Move to InProgress when starting work
+- Move to In Progress when starting work
 - Move to Review when ready for review
 - Add comments with progress updates
 
